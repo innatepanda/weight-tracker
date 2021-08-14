@@ -1,0 +1,114 @@
+.Home{
+    background-color: white;
+    color: black;
+    
+    overflow-x: hidden;
+    display: grid;
+    grid-template-columns: 5% auto;
+    gap:3%;
+}
+
+.Home-Main{
+    padding:5%;
+    padding-left:0;
+}
+button{
+    box-shadow: none;
+    border:none;
+    padding: 5px;
+    padding-left:20px;
+    padding-right:20px;
+    background-color: #F7D345;
+    border-radius:25px;
+    
+
+}
+button:hover{
+    cursor: pointer;
+    background-color: #55C7B9;
+    color: white;
+}
+.top-btn{
+    float:right;
+    margin-right:3px;
+}
+.delete:hover{
+    background-color: red;
+    
+}
+.yellow{
+    color: #F7D345
+}
+.page-title{
+    text-transform: capitalize;
+    
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 10vh;
+    text-align:left;
+}
+.yellow-ribbon{
+    content:"\A";
+    background-color: #F7D345;
+    height:100%;
+    width:20px;
+}
+.graph-area{
+    display: grid;
+    grid-template-columns: 60% 50%;
+}
+.edit-section{
+    padding-top:10%;
+    display: grid;
+    grid-template-columns: 20% 40% 5%;
+    gap:5%;
+}
+.edit-section button{
+    margin-top:5%;
+
+}
+.weight-table{
+    margin-top:10vh;
+}
+.table-entry{
+    display: grid;
+    
+    grid-template-columns: 15% 20% 10% 20% 15% auto;
+    border: grey 1px solid;
+    padding:0.5%;
+    
+}
+.table-entry div{
+    text-align: center;
+    
+}
+.table-entry:hover{
+    background-color: rgb(250, 250, 250);
+}
+.table-header{
+    font-weight: bold;
+    text-transform: capitalize;
+}
+.percentage{
+    font-size: smaller;
+    opacity:0.8;
+}
+.green{
+    color: green ;
+}
+.red{
+    color: red;
+}
+.grey{
+    color: grey;
+    
+}
+
+
+.loading{
+    font-size: 50px;
+    font-weight: bold;
+    padding-top:20%;
+    text-align: center;
+    
+}
