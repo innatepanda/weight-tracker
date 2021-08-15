@@ -28,7 +28,7 @@ const FrontPage=({showmodal})=>{
                     
                     const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
                     document.querySelector('#password').setAttribute('type', type);
-                    document.querySelector('#eye').innerText=="+1"?document.querySelector('#eye').innerText="-1":document.querySelector('#eye').innerText="+1"
+                    document.querySelector('#eye').innerText==="+1"?document.querySelector('#eye').innerText="-1":document.querySelector('#eye').innerText="+1"
 
                 }} id="eye">+1</button>
             <div></div>
@@ -102,7 +102,7 @@ const FrontPage=({showmodal})=>{
                         age: age
                       }, (error)=>{
                         console.log(error)
-                        if(error!=null)
+                        if(error)
                         {
                           modalDetails={
                             open:true,
@@ -124,7 +124,7 @@ const FrontPage=({showmodal})=>{
                         
                         
                       }, (error)=>{
-                        if(error!=null)
+                        if(error)
                         {
                         modalDetails={
                           open:true,
