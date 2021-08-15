@@ -3,8 +3,14 @@ import firebase from '../../Config/firebase'
 import { useHistory } from "react-router-dom";
 import './FrontPage.css'
 var age=0;
-const FrontPage=()=>{
-  console.log(firebase.auth().currentUser, firebase.auth().currentUser?"null":"true")
+var modalDetails, email, password;
+const FrontPage=({showmodal})=>{
+  modalDetails={
+    open:false,
+    msg:"null",
+    color:"red"
+  }
+  email='';password='';
     const history = useHistory();
     
     return(
@@ -16,10 +22,45 @@ const FrontPage=()=>{
           </div>
           <div className="login-section">
             <div className="edit-section">
-            <div>Email: </div><input id="age" ></input><div></div>
-            <div>Password:</div> <input id="age" ></input><div></div>
+            <div>Email: </div><input onChange={(e)=>{email=e.target.value;}}></input><div></div>
+            <div>Password:</div> <input id="password" type="password" onChange={(e)=>{password=e.target.value}} ></input>
+            <button onClick={()=>{
+                    
+                    const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
+                    document.querySelector('#password').setAttribute('type', type);
+                    document.querySelector('#eye').innerText=="+1"?document.querySelector('#eye').innerText="-1":document.querySelector('#eye').innerText="+1"
+
+                }} id="eye">+1</button>
             <div></div>
-            <button>Sign In</button>
+            <button onClick={()=>{
+               if(email===''||password==='')
+               {
+                   modalDetails={
+                   open:true,
+                   msg:"email or password cannot be left blank",
+                   color:"red"
+                 }
+                 showmodal(modalDetails)
+               
+
+               }else{
+              firebase.auth().signInWithEmailAndPassword(email, password)
+              .then(() => {
+                history.push('/Home');
+              })
+              .catch((error) => {
+                modalDetails={
+                  open:true,
+                  msg:error.message,
+                  color:"red"
+                }
+                showmodal(modalDetails)
+              });
+            }
+            }}>Sign In</button>
+            <div></div>
+            <div></div>
+            <button  onClick={()=>history.push('/Register')}>Register</button>
             </div>
             
             <hr />
@@ -40,13 +81,20 @@ const FrontPage=()=>{
                   
                   firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).get().then((snapshot) => {
                     if (snapshot.exists()) {
-                      
+                      age=0;
                       //console.log("ex")
                       history.push('/Home')
                     } else {
                       if(age<=0 || age>=200)
                       {
+                        modalDetails={
+                          open:true,
+                          msg:"invalid age",
+                          color:"red"
+                        }
+                        showmodal(modalDetails)
                         console.log("invalid age");
+                        age=0;
                       }
                       else{
                         console.log("in")
@@ -54,7 +102,18 @@ const FrontPage=()=>{
                         age: age
                       }, (error)=>{
                         console.log(error)
+                        if(error!=null)
+                        {
+                          modalDetails={
+                            open:true,
+                            msg:error.message,
+                            color:"red"
+                          }
+                          showmodal(modalDetails)
+
+                        }
                       });
+                      age=0;
                       var today=new Date()
                       //today= today.getDate()+"-"+today.getMonth()+"-"+today.getFullYear()
                     
@@ -65,13 +124,28 @@ const FrontPage=()=>{
                         
                         
                       }, (error)=>{
+                        if(error!=null)
+                        {
+                        modalDetails={
+                          open:true,
+                          msg:error.message,
+                          color:"red"
+                        }
+                        showmodal(modalDetails)
                         console.log(error)
+                      }
                       }).then(()=>{
                         history.push('/Home')
                       });
                       
                     }
                   }}).catch((error) => {
+                    modalDetails={
+                      open:true,
+                      msg:error.message,
+                      color:"red"
+                    }
+                    showmodal(modalDetails)
                     console.error(error);
                   });
                 
@@ -80,9 +154,13 @@ const FrontPage=()=>{
                 
                 })
                 .catch((error) => {
-                  var errorCode = error.code;
-                  var errorMessage = error.message;
-                  // ...
+                  modalDetails={
+                    open:true,
+                    msg:error.message,
+                    color:"red"
+                  }
+                  showmodal(modalDetails)
+                  
                 });
 
               

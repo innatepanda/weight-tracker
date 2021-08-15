@@ -13,7 +13,7 @@ class ErrorModal extends React.Component{
 
     }
     super(props)
-    console.log(props)
+  
     this.state={
      details:pr
     }

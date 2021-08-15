@@ -9,14 +9,11 @@ import {
 } from "react-router-dom";
 import FrontPage from './layout/FrontPage/FrontPage'
 import Home from './layout/Home/Home'
+import Register from './layout/Register/Register'
 import ErrorPage from './layout/ErrorPage/ErrorPage'
 import ErrorModal from './layout/ErrorModal/ErrorModal'
 function App() {
-  var pr={
-    open:false,
-    msg: "nan",
-    color:"red"
-  }
+  
   const modalRef=useRef();
   //console.log()
   return (
@@ -28,17 +25,16 @@ function App() {
       <Switch>
 
         <Route path='/' exact>
-          <FrontPage/>
+          <FrontPage showmodal={(details)=>{modalRef.current.showmodal(details)}}/>
         </Route>
         <Route path='/Login' >
-          <FrontPage/>
+          <FrontPage showmodal={(details)=>{modalRef.current.showmodal(details)}}/>
         </Route>
-        <Route path='/Home' exact>
-        
+        <Route path='/Home' exact>        
           <Home showmodal={(details)=>{modalRef.current.showmodal(details)}}/>      
-
-
-        
+        </Route>
+        <Route path='/Register'>
+          <Register showmodal={(details)=>{modalRef.current.showmodal(details)}}/>
         </Route>
         
         <Route>

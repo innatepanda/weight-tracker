@@ -5,8 +5,8 @@ import {Line} from 'react-chartjs-2';
 import './Home.css'
 var height, weight, state, modalDetails;
 class  Home extends React.Component{
-   
-    //console.log(firebase.auth().currentUser)
+  
+    
     constructor(props)
     {
         super(props)
@@ -15,7 +15,8 @@ class  Home extends React.Component{
             details:[],
             loaded: false,
             user: null,
-            showmodal: props.showmodal
+            showmodal: props.showmodal,
+            editopen: -1
 
 
         }
@@ -26,29 +27,10 @@ class  Home extends React.Component{
         }
         
         
-        //history=useHistory()
+        
         height=0;
         weight=0;
-         /*state = {
-            labels: ['January', 'February', 'March',
-                     'April', 'May', 'May'],
-            datasets: [
-              {
-                label: 'weights',
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: 'rgba(75,192,192,1)',
-                borderColor: 'rgba(0,0,0,1)',
-                borderWidth: 2,
-                data: [65, 59, 80, 81, 56, 90]
-              }
-            ]
-          }*/
-          
-          
-
-          
-              
+        
     }
     componentDidMount()
     {
@@ -56,7 +38,7 @@ class  Home extends React.Component{
         console.log(user)
         this.setState({
           user: user,
-          //loaded: true
+          
 
         }, ()=>{
           if(this.state.user!=null)
@@ -77,7 +59,7 @@ class  Home extends React.Component{
     getData()
     {
         firebase.database().ref().child("users").child(firebase.auth().currentUser.uid).get().then((snapshot) => {
-            //console.log(snapshot.val())
+            
             var d=[], labels=[], weights=[];
             
             for (const [key, value] of Object.entries(snapshot.val().specifics))
@@ -160,39 +142,46 @@ class  Home extends React.Component{
                   <div className="Home-Main">
                     {
                       this.state.user.isAnonymous?
-                      <button className="top-btn delete" onClick={()=>{
-                        firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
-                                
-                              }, (error)=>{
-                                modalDetails={
-                                  open:true,
-                                  color:"red",
-                                  msg: error.message
-                                }
-                      
-                                  this.state.showmodal(modalDetails)
-                              }).then(()=>{
-                                firebase.auth().signOut()
-                                .then(() => {
+                      <div className="top-btn ">
+                        <button  onClick={()=>this.props.history.push('/Register')}>Switch to permanent</button>
+                                  <button className="delete" onClick={()=>{
+                                    firebase.database().ref('users/' + firebase.auth().currentUser.uid).set({
+                                            
+                                          }, (error)=>{
+                                            if(error!=null)
+                                            {
+                                            modalDetails={
+                                              open:true,
+                                              color:"red",
+                                              msg: error.message
+                                            }
                                   
-                                  
-                                  this.props.history.push('/Login');
-                                })
-                                .catch((error) => {
-                                  modalDetails={
-                                    open:true,
-                                    color:"red",
-                                    msg: error.message
-                                  }
-                        
-                                    this.state.showmodal(modalDetails)
-                                  // ...
-                                });
-                
-                                
-                              });
-                        
-                    }}>delete anon acc</button>
+                                              this.state.showmodal(modalDetails)
+                                          }
+                                          }).then(()=>{
+                                            firebase.auth().signOut()
+                                            .then(() => {
+                                              
+                                              
+                                              this.props.history.push('/Login');
+                                            })
+                                            .catch((error) => {
+                                              modalDetails={
+                                                open:true,
+                                                color:"red",
+                                                msg: error.message
+                                              }
+                                    
+                                                this.state.showmodal(modalDetails)
+                                              // ...
+                                            });
+                            
+                                            
+                                          });
+                                    
+                                }}>delete anonymous account</button>
+
+                    </div>
                     :
                     <button className="top-btn" onClick={()=>{
                         
@@ -212,11 +201,7 @@ class  Home extends React.Component{
                           this.state.showmodal(modalDetails)
                         // ...
                       });
-      
-                      
-                   
-              
-          }}>sign out</button>
+                      }}>sign out</button>
 
                     }
                   
@@ -224,12 +209,7 @@ class  Home extends React.Component{
                   <div className="page-title">Welcome,<span className="yellow">User</span> </div>
                   <div className="graph-area">
                   <div>
-                  <Line
-                  data={state}
-                  options={{
-                    
-                    }}
-                />
+                  <Line data={state} options={{ }} />
                   </div>
                   <div >
                     <div className="edit-section">
@@ -237,7 +217,7 @@ class  Home extends React.Component{
                     <div>height</div><input placeholder={height} onChange={(e)=>{height=parseInt(e.target.value)}}></input><div>cm</div>
                     <div></div>
                     <button onClick={()=>{
-                      if(weight==0 || height==0)
+                      if(weight===0 || height===0)
                       {
                         modalDetails={
                           open:true,
@@ -250,7 +230,7 @@ class  Home extends React.Component{
                       else{
                       
                         var today=new Date();
-                        //today=today.getDate()+"-"+today.getMonth()+"-"+today.getFullYear()
+                        
                         firebase.database().ref('users/' + firebase.auth().currentUser.uid+'/specifics/'+today.getTime()).set({
                             weight: weight,
                             height: height,
@@ -260,7 +240,7 @@ class  Home extends React.Component{
                               if(error)
                                     console.log(error)
                           }).then(()=>{
-                            //history.push('/Home')
+                            
                             this.getData()
                             height=0;weight=0;
                           });
@@ -269,11 +249,15 @@ class  Home extends React.Component{
                     }}>add</button>
                     <div></div>
                     </div>
-                   
-                    
-                    <br /><br />
+                   <br /><br />
                     </div>
                     </div>
+
+
+
+
+
+
 
 
 
@@ -289,10 +273,10 @@ class  Home extends React.Component{
                         </div>
                         {
                         this.state.details.map((data, index)=>{
-                          var percentage_change;
+                          var percentage_change, newweight=data.weight, newheight=data.height;
                           var created=new Date(parseInt(data.time));
                           created=created.getHours()+"hrs "+created.getDate()+"/"+created.getMonth()+"/"+created.getFullYear()
-                            if(index==this.state.details.length-1)
+                            if(index===this.state.details.length-1)
                             {
                               percentage_change="00.00"
                               
@@ -303,18 +287,55 @@ class  Home extends React.Component{
                             var BMI=(data.weight) / (data.height * data.height)
                             BMI=(BMI*10000).toFixed(2);
                             var cname=
-                            percentage_change==0?"percentage grey":
-                            percentage_change>0?"percentage red":"percentage green"
+                            percentage_change<0?"percentage green":
+                            percentage_change>0?"percentage red":"percentage grey"
                             percentage_change="( "+percentage_change+"% )" 
 
                             
                             return(
                                 <div key={index} className="table-entry">
                                     <div>{created}</div>
-                                    <div> {data.weight} kg</div> <div className={cname}>{percentage_change}</div>
-                                    <div> {data.height} cm</div>
+                                    <div> {this.state.editopen===index?<input placeholder={data.weight} onChange={(e)=>{newweight=parseInt(e.target.value)}}></input>:data.weight} kg</div> 
+                                    <div className={cname}>{percentage_change}</div>
+                                    <div> {this.state.editopen===index?<input placeholder={data.height} onChange={(e)=>{newheight=parseInt(e.target.value)}}></input>:data.height} cm</div>
                                     <div>{BMI}</div>
                                     <div>
+                                    <button onClick={()=>{
+                                      if(this.state.editopen===-1)
+                                      {
+                                        this.setState({
+                                          editopen: index
+                                        }, ()=>{
+  
+                                        })
+
+                                      }
+                                      else if(this.state.editopen===index &&  newheight>20&&newweight>=10)
+                                      {
+                                        firebase.database().ref('users/' + firebase.auth().currentUser.uid+'/specifics/'+data.time).set({
+                                          weight: newweight,
+                                          height: newheight
+                                        }).then(()=>{
+                                          this.setState({
+                                            editopen:-1
+                                          })
+                                          this.getData()
+                                      })
+
+                                      }
+                                      else{
+                                        modalDetails={
+                                          open:true,
+                                          msg:"invalid height or weight",
+                                          color:"red"
+                                        }
+                                        this.state.showmodal(modalDetails)
+                                      }
+                                      
+                                      
+
+
+                                    }}>{this.state.editopen===index?"confirm":"edit"}</button>
                                     <button className="delete" onClick={()=>{
                                       if(this.state.details.length>1)
                                       {
@@ -323,6 +344,12 @@ class  Home extends React.Component{
                                         })
                                       }
                                       else{
+                                        modalDetails={
+                                          open:true,
+                                          msg:"cannot delete the only item",
+                                          color:"red"
+                                        }
+                                        this.state.showmodal(modalDetails)
                                         console.log("cannot delete")
                                       }
 
@@ -354,6 +381,7 @@ class  Home extends React.Component{
                     
                 </div>
                 </div>
+                //end
 
             );
         }
