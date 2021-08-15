@@ -29,7 +29,7 @@ const Register=({showmodal})=>{
                     
                     const type = document.querySelector('#password').getAttribute('type') === 'password' ? 'text' : 'password';
                     document.querySelector('#password').setAttribute('type', type);
-                    document.querySelector('#eye').innerText=="+1"?document.querySelector('#eye').innerText="-1":document.querySelector('#eye').innerText="+1"
+                    document.querySelector('#eye').innerText==="+1"?document.querySelector('#eye').innerText="-1":document.querySelector('#eye').innerText="+1"
 
                 }} id="eye">+1</button>
 
